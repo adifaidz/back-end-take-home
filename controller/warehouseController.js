@@ -1,17 +1,17 @@
-async function register(req, res) {
+async function list(req, res) {
     res.send('NOT IMPLEMENTED: Site Home Page');
 }
 
-async function login(req, res) {
+async function create(req, res) {
     res.send('NOT IMPLEMENTED: Site Home Page');
 }
 
-async function logout(req, res) {
+async function remove(req, res) {
     res.send('NOT IMPLEMENTED: Site Home Page');
 }
 
 module.exports = {
-    register,
-    login,
-    logout,
+    list,
+    create,
+    remove,
 };
