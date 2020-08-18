@@ -1,4 +1,4 @@
-import {Warehouse, WarehouseProducts} from './../models';
+import {Warehouse, WarehouseProducts} from '../models';
 
 async function list(req, res) {
     await Warehouse.findAll().then((warehouse) => {
