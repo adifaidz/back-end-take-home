@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 async function register(req, res) {
     res.send('NOT IMPLEMENTED: Site Home Page');
 }
