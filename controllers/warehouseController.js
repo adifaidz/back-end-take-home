@@ -8,13 +8,36 @@ async function list(req, res) {
     });
 }
 
-async function create(req, res) {
-    const { name, desc } = req.body;
-    await Warehouse.create(req.body).then((warehouse) => {
+async function get(req, res) {
+    const {id} = req.params;
+
+    await Warehouse.findOne({ where : {id} }).then((warehouse) => {
         res.json(warehouse);
     }).catch((err) => {
         res.status(500).json(err);
     });
+}
+
+async function create(req, res) {
+    const { name, desc } = req.body;
+    await Warehouse.create({ name, desc }).then((warehouse) => {
+        res.json(warehouse);
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+}
+
+async function update(req, res) {
+    const { id } = req.params;
+    const { name, desc } = req.body;
+
+    const warehouse = await Warehouse.findOne({ where: { id }});
+    
+    await warehouse.update({ name, desc }).catch(err => {
+        res.status(500).json(err);
+    });
+
+    res.status(200).json(warehouse);
 }
 
 async function remove(req, res) {
@@ -63,9 +86,7 @@ async function restock(req, res) {
     if (!record)
         return res.sendStatus(404);
 
-    await record.update({ quantity: record.quantity + amount },{ 
-        where: { warehouseId: warehouseId, productId: productId } 
-    }).catch((err) => {
+    await record.update({ quantity: record.quantity + amount }).catch((err) => {
         console.log(err);
         res.status(500).json(err);
     });
@@ -94,9 +115,7 @@ async function unstocks(req, res) {
             message: 'Amount must be less equal to ' + record.quantity
         });
 
-    await record.update({ quantity: record.quantity - amount },{ 
-        where: { warehouseId: warehouseId, productId: productId } 
-    }).catch((err) => {
+    await record.update({ quantity: record.quantity - amount }).catch((err) => {
         console.log(err);
         res.status(500).json(err);
     });
@@ -106,7 +125,9 @@ async function unstocks(req, res) {
 
 module.exports = {
     list,
+    get,
     create,
+    update,
     remove,
     stocks,
     restock,
