@@ -1,10 +1,11 @@
 import express from "express";
-import productController from "./../controllers/productController";
+import { validateProduct, handleValidate } from './../validator';
+import { list, create, remove } from "./../controllers/productController";
 
 const router = express.Router();
 
-router.get('/', productController.list);
-router.post('/', productController.create);
-router.delete('/:id', productController.remove);
+router.get('/', list);
+router.post('/', validateProduct, handleValidate, create);
+router.delete('/:id', remove);
 
 export default router;

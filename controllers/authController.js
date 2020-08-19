@@ -15,7 +15,6 @@ async function login(req, res, next) {
     Auth.authenticate('login', async (err, user, info) => {     
         try {
             if(err || !user){
-                console.log(err);
                 const error = new Error('An Error occurred')
                 return next(error);
             }

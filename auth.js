@@ -29,11 +29,13 @@ passport.use('signup', new LocalStrategy(authFields, async (email, password, don
 
 passport.use('login', new LocalStrategy(authFields, async (email, password, done) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where : {email} });
+
     if(!user)
       return done(null, false, { message : 'User not found'});
 
     const validate = await user.validatePassword(password);
+    
     if(!validate)
       return done(null, false, { message : 'Wrong Password'});
 

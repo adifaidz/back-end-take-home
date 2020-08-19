@@ -47,6 +47,32 @@ async function stocks(req, res) {
 
 }
 
+async function restock(req, res) {
+    const { warehouseId, productId } = req.params;
+    const { amount } = req.body;
+
+    const record = await WarehouseProducts.findOne({
+        where: {
+            warehouseId,
+            productId
+        },
+    }).catch((err) => {
+        res.status(500).json(err);
+    });
+
+    if (!record)
+        return res.sendStatus(404);
+
+    await record.update({ quantity: record.quantity + amount },{ 
+        where: { warehouseId: warehouseId, productId: productId } 
+    }).catch((err) => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+
+    res.status(200).json(record);
+}
+
 async function unstocks(req, res) {
     const { warehouseId, productId } = req.params;
     const { amount } = req.body;
@@ -83,5 +109,6 @@ module.exports = {
     create,
     remove,
     stocks,
+    restock,
     unstocks,
 };

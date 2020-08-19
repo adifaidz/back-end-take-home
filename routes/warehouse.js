@@ -1,12 +1,21 @@
 import express from "express";
-import warehouseController from "../controllers/warehouseController";
+import { validateWarehouse, validateStock, handleValidate } from './../validator';
+import {
+    list,
+    create,
+    stocks,
+    restock,
+    unstocks,
+    remove
+} from "../controllers/warehouseController";
 
 const router = express.Router();
 
-router.get('/', warehouseController.list);
-router.post('/', warehouseController.create);
-router.get('/:warehouseId/stocks/:productId', warehouseController.stocks);
-router.post('/:warehouseId/unstocks/:productId', warehouseController.unstocks);
-router.delete('/:id', warehouseController.remove);
+router.get('/', list);
+router.post('/', validateWarehouse, handleValidate, create);
+router.get('/:warehouseId/stocks/:productId', stocks);
+router.post('/:warehouseId/stocks/:productId', restock);
+router.post('/:warehouseId/unstocks/:productId', validateStock, handleValidate, unstocks);
+router.delete('/:id', remove);
 
 export default router;
