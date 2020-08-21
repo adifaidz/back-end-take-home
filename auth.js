@@ -58,8 +58,6 @@ passport.use(new JWTStrategy(jwtOptions, async (token, done) => {
           return done(null, false);
 
         const savedToken = JWT.decode(userAuth.token);
-        console.log(token);
-        console.log(savedToken);
         if(!_.isEqual(savedToken, token))
           return done(null, false);
           

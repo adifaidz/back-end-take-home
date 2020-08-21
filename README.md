@@ -10,58 +10,144 @@ We feel that the best place to really show us your skills is somewhere you feel 
 
 This take home test is used to determine how you go about solving problems logically, as well as building out easy to use, API End points. This test is very open to interpretation and implementation.
 
-### Coding Challenge
+## First time use
 
-Managing product inventory requires adding products to a product catalog and adding warehouses to store the products.
+- Install dependencies :
 
-Develop a backend app that exposes endpoints API for managing inventory with these nine (9) functionality:
+  ```
+  npm install 
+  ```
 
-1. Add product
-2. Add warehouse
-3. Stock
-4. Unstock
-5. List product
-6. List warehouses
-7. List warehouse
-8. Delete product
-9. Delete Warehouse
+- Create a `.env` file with theses values :
+  
+  ```
+  PORT=3000
+  TOKEN_SECRET=SECRET
+  ```
 
-### User Stories (Requirements)
+- Configure database in config/config.json, in this case we use dev :
 
-- As a user I can register on the Api.
-- As a user I can login in and do the following on a product:
-  - Add product
-  - List products
-  - Add warehouse
-  - List warehouse
-  - List warehouses
-  - Stock
-  - Unstock
-  - Delete product
-  - Delete warehouse
-- As a user I can logout from the system
+  ```js
+  {
+    "development": {
+      "username": "root",
+      "password": null,
+      "database": "regov-backend-test",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+    },
+    ...
+  }
 
-NOTE:
-Stock: stocks is the quantity amount of a product with Regov Warehouse
-Unstock: unstocks the amount of product with Regov in Warehouse.
+  ```
 
-Feel free to go above and beyond if you have ideas for extra features!
+- Run db migration and seeder
 
-### Notes and recommendations
+  ```
+    npx sequelize-cli db:migrate
+    npx sequelize-cli db:seed:all
+  ```
 
-- We use Node.js(AWS SDK) with Serverless architecture or docker containers.
-- The languages, frameworks and libraries mentioned are recommendations only, you are free to use whatever you are comfortable with.
-- The project structure is up to your decision.
-- You are recommended to use git commits in a logical manner to demonstrate the development progress
-- Writing tests and adhering to development standards/conventions will attract extra points.
-- Writing design documents will attract extra points :)
+- Run the project
 
-### Submitting
+  ```
+    npm run dev
+  ```
 
-1. Your code should be made available in a public or private repository, on your personal github or bitbucket;
-2. Push up to your repo one last time
-3. Email paul.agada@regovtech.com with the link to your repository
+## Authenticating
 
-### Questions
+- Register
+  - Auth : None
+  - Method: POST
+  - Endpoint : /auth/register
+  - Params: 
+    ```json
+    {
+      "email": "your-email@test.com",
+      "password": "password"
+    }
+    ```
+  - Response
+    ```json
+    {
+      "message": "Signup successful",
+      "user": {
+          "id": 127,
+          "email": "test@test.com",
+          "updatedAt": "2020-08-21T16:30:15.759Z",
+          "createdAt": "2020-08-21T16:30:15.759Z"
+      }
+    }
+    ```
 
-If you have any questions during the challenge feel free to email paul.agada@regovtech.com
+- Login
+  - Auth : None
+  - Method : POST
+  - Endpoint : /auth/login
+  - Params: 
+    ```json
+    {
+      "email": "your-email@test.com",
+      "password": "password"
+    }
+    ```
+  - Response
+    ```json
+    {
+        "token": "YOUR-JWT-TOKEN"
+    }
+    ```
+
+- Logout
+  - Auth : JWT
+  - Method : GET
+  - Endpoint : /auth/logout
+  - Response
+    ```json
+    OK
+    ```
+
+## Resource
+
+- Product
+  - Params : 
+    ```json
+    {
+      "name": "Product Name",
+      "desc": "Product Description"
+    }
+    ```
+  - Endpoint :
+    - List - `GET products`
+    - Create - `POST products`
+    - Find by ID - `GET products/{id}`
+    - Update - `PUT products/{id}`
+    - Delete - `DELETE products/{id}`
+
+- Warehouse
+  - Params : 
+    ```json
+    {
+      "name": "Warehouse Name",
+      "desc": "Warehouse Description"
+    }
+    ```
+  - Endpoint :
+    - List - `GET warehouse`
+    - Create - `POST warehouse`
+    - Find by ID - `GET warehouse/{id}`
+    - Update - `PUT warehouse/{id}`
+    - Delete - `DELETE warehouse/{id}`
+
+- Stocks
+  - Params : 
+    ```json
+    {
+      "amount": 10
+    }
+    ```
+  - Endpoint :
+    - Get Stock of Product in Warehouse - `GET warehouse/{:warehouseID}/stocks/{productID}`
+    - Add Stock (Restock) of Product in Warehouse - `POST warehouse/stocks/{productId}`
+    - Reduce Stock (Unstock) of Product in Warehouse - `POST warehouse/unstocks/{productId}`
+  

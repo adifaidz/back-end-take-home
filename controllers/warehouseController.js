@@ -87,7 +87,6 @@ async function restock(req, res) {
         return res.sendStatus(404);
 
     await record.update({ quantity: record.quantity + amount }).catch((err) => {
-        console.log(err);
         res.status(500).json(err);
     });
 
@@ -116,7 +115,6 @@ async function unstocks(req, res) {
         });
 
     await record.update({ quantity: record.quantity - amount }).catch((err) => {
-        console.log(err);
         res.status(500).json(err);
     });
 
